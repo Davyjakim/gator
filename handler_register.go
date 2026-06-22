@@ -25,7 +25,7 @@ func handleRegister(s *state, cmd command) error{
 		os.Exit(1)
 		return err
 	}
-	err=s.cfg.SetUser(user.Name)
+	err=s.cfg.SetUser(user.Name, user.ID)
 	if err!=nil{
 		
 		return err

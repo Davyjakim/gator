@@ -15,7 +15,7 @@ func handleLogin(s *state, cmd command) error{
 	if err!=nil{
 		os.Exit(1)
 	}
-	err=s.cfg.SetUser(user.Name)
+	err=s.cfg.SetUser(user.Name, user.ID)
 	if err!=nil{
 		return err
 	}

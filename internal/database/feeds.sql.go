@@ -56,6 +56,24 @@ func (q *Queries) AddFeed(ctx context.Context, arg AddFeedParams) (Feed, error) 
 	return i, err
 }
 
+const getAFeed = `-- name: GetAFeed :one
+SELECT id, created_at, updated_at, name, url, user_id FROM feeds WHERE url = $1
+`
+
+func (q *Queries) GetAFeed(ctx context.Context, url string) (Feed, error) {
+	row := q.db.QueryRowContext(ctx, getAFeed, url)
+	var i Feed
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.Url,
+		&i.UserID,
+	)
+	return i, err
+}
+
 const getFeeds = `-- name: GetFeeds :many
 SELECT feeds.name, feeds.url,
 users.name AS userName  FROM feeds 

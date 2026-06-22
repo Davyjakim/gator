@@ -34,6 +34,7 @@ func main(){
 	commandRegistry.register("agg", handleAgg)
 	commandRegistry.register("addfeed", handleAddFeed)
 	commandRegistry.register("feeds",handleGetFeeds)
+	commandRegistry.register("follow",handleFollow)
 	input := os.Args
 	if len(input)<2{
 		fmt.Printf("No enough arguments provided ")
@@ -48,9 +49,8 @@ func main(){
 		fmt.Printf("This command: '%s' is unknown\n", useCommand.name)
 		os.Exit(1)
 	}
-	cmd(&appState,useCommand)
+	err= cmd(&appState,useCommand)
 	if err != nil {
-		fmt.Println(err)
 		log.Fatal(err)
 	}
 }

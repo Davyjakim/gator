@@ -1,0 +1,16 @@
+-- name: AddFeed :one
+INSERT INTO feeds (id, created_at, updated_at,user_id, name, url)
+VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6
+)
+RETURNING *;
+
+-- name: GetFeeds :many
+SELECT feeds.name, feeds.url,
+users.name AS userName  FROM feeds 
+LEFT JOIN users ON feeds.user_id= users.id;

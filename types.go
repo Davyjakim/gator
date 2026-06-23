@@ -7,12 +7,6 @@ import (
 	"github.com/Davyjakim/gator/internal/database"
 )
 
-type CliCommand struct{
-	name string
-	description string
-	callback func(state *state, arg ...string) error
-}
-
 type state struct{
 	cfg *config.Config
 	db *database.Queries

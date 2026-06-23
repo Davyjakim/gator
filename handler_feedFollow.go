@@ -10,7 +10,7 @@ import (
 )
 
 
-func handleFollow(s *state, cmd command)error{
+func handleFollow(s *state, cmd command,user database.User)error{
 	if len(cmd.args)<1{
 		return fmt.Errorf("The arguments are not enough: follow <url>")
 	}
@@ -21,7 +21,7 @@ func handleFollow(s *state, cmd command)error{
 	}
 	feedFollow,err:=s.db.CreateFeedFollow(context.Background(),database.CreateFeedFollowParams{
 		ID: uuid.New(),
-		UserID: s.cfg.CurrentUserId,
+		UserID: user.ID,
 		FeedID: feed.ID,
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
@@ -34,8 +34,8 @@ func handleFollow(s *state, cmd command)error{
 	return nil
 }
 
-func handleFollowing(s *state, cmd command)error{
-	feeds,err:=s.db.GetFeedFollowsForUser(context.Background(),s.cfg.CurrentUserId)
+func handleFollowing(s *state, cmd command,user database.User)error{
+	feeds,err:=s.db.GetFeedFollowsForUser(context.Background(),user.ID)
 	if err!=nil{
 		return err
 	}

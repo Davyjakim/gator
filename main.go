@@ -32,10 +32,10 @@ func main(){
 	commandRegistry.register("reset",ClearUsersTable)
 	commandRegistry.register("users", handleGetAllUsers)
 	commandRegistry.register("agg", handleAgg)
-	commandRegistry.register("addfeed", handleAddFeed)
+	commandRegistry.register("addfeed", middlewareLoggedIn(handleAddFeed))
 	commandRegistry.register("feeds",handleGetFeeds)
-	commandRegistry.register("follow",handleFollow)
-	commandRegistry.register("following", handleFollowing)
+	commandRegistry.register("follow",middlewareLoggedIn(handleFollow))
+	commandRegistry.register("following", middlewareLoggedIn(handleFollowing))
 	input := os.Args
 	if len(input)<2{
 		fmt.Printf("No enough arguments provided ")

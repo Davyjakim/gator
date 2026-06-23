@@ -30,6 +30,17 @@ func handleFollow(s *state, cmd command)error{
 	
 		return err
 	}
-	fmt.Printf("Feed name: %s, current userName: %s\nnnn", feedFollow.FeedName,s.cfg.CurrentUserName)	
+	fmt.Printf("The user: %s now follows the Feed: %s\n", feedFollow.UserName,feedFollow.FeedName)	
+	return nil
+}
+
+func handleFollowing(s *state, cmd command)error{
+	feeds,err:=s.db.GetFeedFollowsForUser(context.Background(),s.cfg.CurrentUserId)
+	if err!=nil{
+		return err
+	}
+	for _,f:=range feeds{
+		fmt.Println(f.FeedName)
+	}
 	return nil
 }

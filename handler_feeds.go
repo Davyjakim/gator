@@ -30,6 +30,14 @@ func handleAddFeed(s *state, cmd command)error{
 		return err
 	}
 	fmt.Printf("The feed: %s was created\n", feed.Name)
+	err=handleFollow(s,command{
+		name: "internal_follow",
+		args: []string{feed.Url},
+	})
+	if err!=nil{
+		return err
+	}
+	
 	return nil
 
 }

@@ -36,6 +36,7 @@ func main(){
 	commandRegistry.register("feeds",handleGetFeeds)
 	commandRegistry.register("follow",middlewareLoggedIn(handleFollow))
 	commandRegistry.register("following", middlewareLoggedIn(handleFollowing))
+	commandRegistry.register("unfollow", middlewareLoggedIn(handleUnFollow))
 	input := os.Args
 	if len(input)<2{
 		fmt.Printf("No enough arguments provided ")

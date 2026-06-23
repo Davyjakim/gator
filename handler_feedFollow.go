@@ -44,3 +44,17 @@ func handleFollowing(s *state, cmd command,user database.User)error{
 	}
 	return nil
 }
+func handleUnFollow(s *state, cmd command, user database.User)error{
+	if len(cmd.args)<1{
+		return fmt.Errorf("URL of the feed is required. example: unfollow <url>")
+	}
+	err:=s.db.UnfollowFeed(context.Background(), database.UnfollowFeedParams{
+		UserID: user.ID,
+		Url: cmd.args[0],
+	})
+	if err!=nil{
+		return err
+	}
+	fmt.Printf("The user: %s successfully unfollowed the feed: %s\n", user.Name,cmd.args[0])
+	return nil
+}

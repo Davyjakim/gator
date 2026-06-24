@@ -2,9 +2,15 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"html"
+	"log"
+	"strings"
 	"time"
+
+	"github.com/Davyjakim/gator/internal/database"
+	"github.com/google/uuid"
 )
 
 func handleAgg(s *state, cmd command) error{
@@ -41,7 +47,28 @@ func scrapeFeeds(s *state) error{
 		return err
 	}
 	for _,rssI:=range rssfeed.Channel.Item{
-		fmt.Printf("(current: %s) \u2022 %s \n ",nextFeed.Name,html.UnescapeString(rssI.Title))
+		publishedDate, err := time.Parse(time.RFC1123Z, strings.TrimSpace(rssI.PubDate))
+		if err!=nil {
+			return err
+		}
+		post,err:= s.db.CreatePost(context.Background(),database.CreatePostParams{
+			ID: uuid.New(),
+			CreatedAt: time.Now().UTC(),
+			UpdatedAt: time.Now().UTC(),
+			Title: html.UnescapeString(rssI.Title),
+			Url: rssI.Link,
+			Description: sql.NullString{String: rssI.Description,Valid: true},
+			PublishedAt: sql.NullTime{Time: publishedDate, Valid: true},
+			FeedID: nextFeed.ID,
+		})
+		if err != nil {
+			if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
+				continue
+			}
+			log.Printf("Couldn't create post: %v", err)
+			continue
+		}
+		fmt.Printf("\u2022 %s\n",post.Title)
 	}
 	return nil
 }

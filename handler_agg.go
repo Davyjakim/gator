@@ -57,7 +57,7 @@ func scrapeFeeds(s *state) error{
 			UpdatedAt: time.Now().UTC(),
 			Title: html.UnescapeString(rssI.Title),
 			Url: rssI.Link,
-			Description: sql.NullString{String: rssI.Description,Valid: true},
+			Description: sql.NullString{String: html.UnescapeString(rssI.Description),Valid: true},
 			PublishedAt: sql.NullTime{Time: publishedDate, Valid: true},
 			FeedID: nextFeed.ID,
 		})

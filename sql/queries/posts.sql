@@ -7,11 +7,17 @@ $1,$2,$3,$4,$5,$6,$7,$8
 RETURNING *;
 
 -- name: GetPostsForUser :many
-SELECT * FROM posts 
+SELECT posts.title AS post_title,
+posts.published_at,
+posts.description,
+posts.*
+FROM posts 
 INNER JOIN feeds 
 ON feeds.id = posts.feed_id
 INNER JOIN feeds_follow 
 ON feeds_follow.feed_id = feeds.id
 INNER JOIN users
 ON users.id = feeds_follow.user_id
-ORDER BY published_at DESC;
+WHERE users.id = $1
+ORDER BY published_at DESC 
+LIMIT $2;
